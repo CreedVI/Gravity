@@ -2,6 +2,7 @@ Gravity.app = function (game) { };
 
 var goals, player, blocks, cursors, gray, complete, moves, level;
 var x, y, count, inc, ax, ay, blocks, brick, goals;
+var resetButton;
 
 Gravity.app.prototype = {
 	create: function () {
@@ -94,6 +95,18 @@ Gravity.app.prototype = {
 			case 2:
 				map = levelTwo;
 				break;
+			case 3:
+				map = levelThree;
+				break;
+			case 4:
+				map = levelFour;
+				break;
+			case 5:
+				map = levelFive;
+				break;
+			case 6:
+				map = levelSix;
+				break;
 			default:
 				console.log("no such level");
 				break;
@@ -176,5 +189,14 @@ Gravity.app.prototype = {
 		else {
 			console.log("nice try");
 		}
+		resetButton = this.add.button(16, 465, 'restart', this.restart, this);
+		
+	},
+	
+	restart: function(){
+		goals.destroy();
+		blocks.destroy();
+		player.destroy();
+		this.worldType1(level);
 	}
 };
