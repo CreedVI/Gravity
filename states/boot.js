@@ -5,6 +5,7 @@ Gravity.boot = function(game) {};
 Gravity.boot.prototype = {
 	preload: function() {
 		this.load.spritesheet('player','./res/guy.png',30,30);
+		this.load.image('level','./res/level.png');
 		this.load.image('restart','./res/restart.png');
 		this.load.image('screen','./res/gravityStartScreen.png');
 		this.load.image('newGame','./res/newGame.png');

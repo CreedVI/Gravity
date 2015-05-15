@@ -2,7 +2,7 @@ Gravity.app = function (game) { };
 
 var goals, player, blocks, cursors, gray, complete, moves, level;
 var x, y, count, inc, ax, ay, blocks, brick, goals;
-var resetButton;
+var resetButton,levelNum,levelText;
 
 Gravity.app.prototype = {
 	create: function () {
@@ -74,6 +74,9 @@ Gravity.app.prototype = {
 			goals.destroy();
 			blocks.destroy();
 			player.destroy();
+			levelNum.destroy();
+			levelText.destroy();
+			resetButton.destroy();
 			this.worldType1(level);
 		}
 	},
@@ -190,7 +193,8 @@ Gravity.app.prototype = {
 			console.log("nice try");
 		}
 		resetButton = this.add.button(16, 465, 'restart', this.restart, this);
-		
+		levelText = this.add.image(372,465,'level');
+		levelNum = this.add.text(430, 470, level, { fontSize: '32pt', fill: '#FFFFFF' });;
 	},
 	
 	restart: function(){
