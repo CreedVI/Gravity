@@ -26,7 +26,6 @@ function preload() {
 }
 
 function create() {
-	level = 2;
 
 	cursors = game.input.keyboard.createCursorKeys();	
 
@@ -149,7 +148,6 @@ var levelTwo = [
 ];
 
 //World generation algorithm 
-
 function worldType1(whatLev){
 	var map;
     y=0;
