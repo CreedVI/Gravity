@@ -1,12 +1,7 @@
 Gravity.app = function (game) { };
 
-var goals, player, blocks, cursors, gray, complete, moves, level;
-var x, y, count, inc, ax, ay, blocks, brick, goals;
-var resetButton,levelNum,levelText;
-
 Gravity.app.prototype = {
 	create: function () {
-		level = 1;
 
 		cursors = this.input.keyboard.createCursorKeys();
 
@@ -67,18 +62,49 @@ Gravity.app.prototype = {
 		blocks.filters = [gray];
 		this.paused = true;
 		if (this.paused && complete) {
+			completeMenu = this.add.group();
 			//TODO
-			//this will call a method to display the level complete screen.
-			//from there the level will be increased and the world will be regenerated.
-			level++;
-			goals.destroy();
-			blocks.destroy();
-			player.destroy();
-			levelNum.destroy();
-			levelText.destroy();
-			resetButton.destroy();
-			this.worldType1(level);
+			//figure out why completeMenu isn't being distroied like the rest.
+			completeMenu.create(120,100,'baque');
+			completeMenu.create(140,120,'levComp');
+			retry = this.add.button(60,370,'retry',this.retry,this);
+			main = this.add.button(150,370,'main',this.mainMenu,this);
+			next = this.add.button(285,370,'nextLev',this.nextLevel,this);
+			completeMenu.add(retry);
+			completeMenu.add(main);
+			completeMenu.add(next);
 		}
+	},
+	
+	retry: function(){
+		complete = false;
+		goals.destroy();
+		blocks.destroy();
+		player.destroy();
+		gameMenu.destroy();
+		completeMenu.destroy();
+		this.state.start('app');
+	}, 
+	
+	mainMenu: function(){
+		complete = false;
+		goals.destroy();
+		blocks.destroy();
+		player.destroy();
+		gameMenu.destroy();
+		completeMenu.destroy();
+		this.state.start('manemenu');
+	}, 
+	
+	nextLevel: function(){
+		complete = false;
+		level++;
+		goals.destroy();
+		blocks.destroy();
+		player.destroy();
+		gameMenu.destroy();
+		completeMenu.destroy();
+		this.state.start('app');
 	},
 		
 	//World generation algorithm 	
@@ -192,9 +218,13 @@ Gravity.app.prototype = {
 		else {
 			console.log("nice try");
 		}
+		gameMenu = this.add.group();
 		resetButton = this.add.button(16, 465, 'restart', this.restart, this);
 		levelText = this.add.image(372,465,'level');
 		levelNum = this.add.text(430, 470, level, { fontSize: '32pt', fill: '#FFFFFF' });;
+		gameMenu.add(resetButton);
+		gameMenu.add(levelText);
+		gameMenu.add(levelNum);
 	},
 	
 	restart: function(){
