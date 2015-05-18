@@ -2,13 +2,18 @@ var Gravity = {};
 
 var goals, player, blocks, cursors, gray, complete, moves, level;
 var x, y, count, inc, ax, ay, blocks, brick, goals;
-var resetButton,levelNum,levelText,completeMenu,gameMenu;
+var resetButton,levelNum,levelText,completeMenu,gameMenu,pauseBtn,pauseMenu;
+var retry, main, next, newGame, cont;
 
 Gravity.boot = function(game) {};
 
 Gravity.boot.prototype = {
 	preload: function() {
 		this.load.spritesheet('player','./res/guy.png',30,30);
+		this.load.image('pauseText','./res/pausedText.png');
+		this.load.image('gameMenuBack','./res/gameMenuBack.png');
+		this.load.image('pauseBtn','./res/pauseButton.png');
+		this.load.image('cont','./res/continue.png');
 		this.load.image('baque','./res/menuBack.png');
 		this.load.image('levComp','./res/levelComplete.png');
 		this.load.image('nextLev','./res/nextLevel.png');
@@ -23,7 +28,6 @@ Gravity.boot.prototype = {
 		this.load.script('gray', 'https://cdn.rawgit.com/photonstorm/phaser/master/filters/Gray.js');
 	},
 	create: function() {
-		level = 1;
 		this.state.start('manemenu');
 	}
 };

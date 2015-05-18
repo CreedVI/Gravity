@@ -15,6 +15,7 @@ Gravity.app.prototype = {
 	update: function () {
 		this.controls();
 		this.phys();
+		this.cheque();
 	},
 
 	phys: function () {
@@ -26,33 +27,61 @@ Gravity.app.prototype = {
 		player.body.velocity.x = 0;
 		player.body.velocity.y = 0;
 
-		if (this.physics.arcade.collide(player, blocks)) {
-			if (cursors.left.isDown) {
-				player.body.gravity.x = -9750;
-				player.body.gravity.y = 0;
+		switch(this.paused){
+			case true:
+					if(this.input.activePointer.isDown && !complete){
+						pauseMenu.destroy();
+						player.filters = null;
+						goals.filters = null;
+						blocks.filters = null;
+						this.paused = false;
+					}
+				break;
+			
+			case false:
+				if (this.physics.arcade.collide(player, blocks)) {
+					if (cursors.left.isDown) {
+						player.body.gravity.x = -9750;
+						player.body.gravity.y = 0;
+						
+						player.animations.play('left');
+					}
+					else if (cursors.right.isDown) {
+						player.body.gravity.x = 9750;
+						player.body.gravity.y = 0;
+						player.animations.play('right');
+					}
+					else if (cursors.up.isDown) {
+						player.body.gravity.y = -9750;
+						player.body.gravity.x = 0;
+						player.animations.play('up');
+					}
+					else if (cursors.down.isDown) {
+						player.body.gravity.y = 9750;
+						player.body.gravity.x = 0;
+						player.animations.play('down');
+					}
+				}
+	
+				else {
+					player.animations.stop();
+				}
+				break;
 				
-				player.animations.play('left');
-			}
-			else if (cursors.right.isDown) {
-				player.body.gravity.x = 9750;
-				player.body.gravity.y = 0;
-				player.animations.play('right');
-			}
-			else if (cursors.up.isDown) {
-				player.body.gravity.y = -9750;
-				player.body.gravity.x = 0;
-				player.animations.play('up');
-			}
-			else if (cursors.down.isDown) {
-				player.body.gravity.y = 9750;
-				player.body.gravity.x = 0;
-				player.animations.play('down');
-			}
+			default:
+				break;
 		}
-
-		else {
-			player.animations.stop();
-		}
+	},
+	
+	cheque: function(){
+		//TODO
+		//Check the player's x and y to see if they are
+		//within thw wolrd's boundries.
+		//If not give them a game over screen.
+		
+		//if(){
+			
+		//}	
 	},
 
 	levelComplete: function (player, goals) {
@@ -63,9 +92,6 @@ Gravity.app.prototype = {
 		this.paused = true;
 		if (this.paused && complete) {
 			completeMenu = this.add.group();
-			//TODO
-			//figure out why completeMenu isn't being distroied like the rest.
-			completeMenu.create(120,100,'baque');
 			completeMenu.create(140,120,'levComp');
 			retry = this.add.button(60,370,'retry',this.retry,this);
 			main = this.add.button(150,370,'main',this.mainMenu,this);
@@ -83,6 +109,7 @@ Gravity.app.prototype = {
 		player.destroy();
 		gameMenu.destroy();
 		completeMenu.destroy();
+		this.paused = false;
 		this.state.start('app');
 	}, 
 	
@@ -93,6 +120,7 @@ Gravity.app.prototype = {
 		player.destroy();
 		gameMenu.destroy();
 		completeMenu.destroy();
+		this.paused = false;
 		this.state.start('manemenu');
 	}, 
 	
@@ -104,6 +132,7 @@ Gravity.app.prototype = {
 		player.destroy();
 		gameMenu.destroy();
 		completeMenu.destroy();
+		this.paused = false;
 		this.state.start('app');
 	},
 		
@@ -219,15 +248,38 @@ Gravity.app.prototype = {
 			console.log("nice try");
 		}
 		gameMenu = this.add.group();
-		resetButton = this.add.button(16, 465, 'restart', this.restart, this);
-		levelText = this.add.image(372,465,'level');
+		gameMenu.create(0,450,'gameMenuBack');
+		pauseBtn = this.add.button(0, 453, 'pauseBtn', this.pause, this);
+		levelText = this.add.image(372,470,'level');
 		levelNum = this.add.text(430, 470, level, { fontSize: '32pt', fill: '#FFFFFF' });;
-		gameMenu.add(resetButton);
+		retry = this.add.button(90,470,'retry',this.restart,this);
+		main = this.add.button(210,470,'main',this.quit,this);
+		gameMenu.add(pauseBtn);
 		gameMenu.add(levelText);
 		gameMenu.add(levelNum);
+		gameMenu.add(retry);
+		gameMenu.add(main);
 	},
 	
+	pause: function(){
+		this.paused = true;
+		pauseMenu = this.add.group();
+		player.filters = [gray];
+		goals.filters = [gray];
+		blocks.filters = [gray];
+		pauseMenu.create(145,163,'pauseText');
+	},
+	
+	quit: function(){
+		goals.destroy();
+		blocks.destroy();
+		player.destroy();
+		gameMenu.destroy();
+		this.state.start('manemenu');
+	}, 
+	
 	restart: function(){
+		pauseMenu.destroy();
 		goals.destroy();
 		blocks.destroy();
 		player.destroy();
