@@ -300,6 +300,6 @@ Gravity.app.prototype = {
 		this.paused = true;
 		goals.filters = [gray];
 		blocks.filters = [gray];
-		gameOverMenu.create(145,163,'gameOver');
+		this.add.image(145,163,'gameOver');
 	}
 };
