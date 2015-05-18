@@ -4,15 +4,24 @@
         <meta charset="UTF-8" />
         <title>FILLELR</title>
         <script src="js/phaser.min.js"></script>
-        <script src="js/nextlevel.js"></script>
+        <script src="js/levels.js"></script>
+        <script src="states/boot.js"></script>
+        <script src="states/startScreen.js"></script>
+        <script src="states/game.js"></script>
+        <script src="states/theEnd.js"></script>
     </head>
     <body>
         <script>
             (function(){
                 var game = new Phaser.Game(450, 510, Phaser.AUTO, 'game');
-                game.state.add('menu', Next.level);
-                game.state.start('menu');
+                game.state.add('boot', Gravity.boot);
+                game.state.add('manemenu', Gravity.startScreen);
+                game.state.add('app',Gravity.app);
+                game.state.add('theEnd',Gravity.theEnd);
+                game.state.start('boot');
             })();
         </script>
+    </head>
+    <body>
     </body>
 </html>

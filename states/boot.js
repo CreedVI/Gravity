@@ -3,13 +3,15 @@ var Gravity = {};
 var goals, player, blocks, cursors, gray, complete, moves, level;
 var x, y, count, inc, ax, ay, blocks, brick, goals;
 var resetButton,levelNum,levelText,completeMenu,gameMenu,pauseBtn,pauseMenu;
-var retry, main, next, newGame, cont;
+var retry, main, next, newGame, cont,gameOver;
 
 Gravity.boot = function(game) {};
 
 Gravity.boot.prototype = {
 	preload: function() {
 		this.load.spritesheet('player','./res/guy.png',30,30);
+		this.load.image('ende','./res/theEnd.png');
+		this.load.image('gameOver','./res/gameOver.png');
 		this.load.image('pauseText','./res/pausedText.png');
 		this.load.image('gameMenuBack','./res/gameMenuBack.png');
 		this.load.image('pauseBtn','./res/pauseButton.png');

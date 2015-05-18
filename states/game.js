@@ -29,7 +29,7 @@ Gravity.app.prototype = {
 
 		switch(this.paused){
 			case true:
-					if(this.input.activePointer.isDown && !complete){
+					if(this.input.activePointer.isDown && !gameOver && !complete){
 						pauseMenu.destroy();
 						player.filters = null;
 						goals.filters = null;
@@ -79,9 +79,16 @@ Gravity.app.prototype = {
 		//within thw wolrd's boundries.
 		//If not give them a game over screen.
 		
-		//if(){
-			
-		//}	
+		if(player.body.x<0||player.body.x>450){
+			console.log("out of bounds on the x");
+			gameOver = true;
+			this.gameOver();
+		}
+		else if(player.body.y<0||player.body.y>450){
+			console.log("out of bounds on the y");
+			gameOver = true;
+			this.gameOver();
+		}
 	},
 
 	levelComplete: function (player, goals) {
@@ -165,6 +172,9 @@ Gravity.app.prototype = {
 			case 6:
 				map = levelSix;
 				break;
+			case 7:
+				var end = true;
+				break;
 			default:
 				console.log("no such level");
 				break;
@@ -243,22 +253,23 @@ Gravity.app.prototype = {
 				y = 0;
 				ax = 0;
 			}
+			gameMenu = this.add.group();
+			gameMenu.create(0,450,'gameMenuBack');
+			pauseBtn = this.add.button(0, 453, 'pauseBtn', this.pause, this);
+			levelText = this.add.image(372,470,'level');
+			levelNum = this.add.text(430, 470, level, { fontSize: '32pt', fill: '#FFFFFF' });;
+			retry = this.add.button(90,470,'retry',this.restart,this);
+			main = this.add.button(210,470,'main',this.quit,this);
+			gameMenu.add(pauseBtn);
+			gameMenu.add(levelText);
+			gameMenu.add(levelNum);
+			gameMenu.add(retry);
+			gameMenu.add(main);
+			this.paused = false;
 		}
-		else {
-			console.log("nice try");
+		else if(end){
+			this.state.start('theEnd');
 		}
-		gameMenu = this.add.group();
-		gameMenu.create(0,450,'gameMenuBack');
-		pauseBtn = this.add.button(0, 453, 'pauseBtn', this.pause, this);
-		levelText = this.add.image(372,470,'level');
-		levelNum = this.add.text(430, 470, level, { fontSize: '32pt', fill: '#FFFFFF' });;
-		retry = this.add.button(90,470,'retry',this.restart,this);
-		main = this.add.button(210,470,'main',this.quit,this);
-		gameMenu.add(pauseBtn);
-		gameMenu.add(levelText);
-		gameMenu.add(levelNum);
-		gameMenu.add(retry);
-		gameMenu.add(main);
 	},
 	
 	pause: function(){
@@ -279,10 +290,16 @@ Gravity.app.prototype = {
 	}, 
 	
 	restart: function(){
-		pauseMenu.destroy();
 		goals.destroy();
 		blocks.destroy();
 		player.destroy();
-		this.worldType1(level);
+		this.state.start('app');
+	},
+	
+	gameOver: function(){
+		this.paused = true;
+		goals.filters = [gray];
+		blocks.filters = [gray];
+		gameOverMenu.create(145,163,'gameOver');
 	}
 };
